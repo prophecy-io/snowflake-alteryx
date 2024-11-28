@@ -1,0 +1,146 @@
+{
+  "BulkColumnExpressions" : {
+    "name" : "BulkColumnExpressions",
+    "macroType" : "query",
+    "definition" : "\n    {% set column_expressions = [] %}\n\n    {% for column in columnNames %}\n        {% if changeOutputFieldName %}\n            {% if prefixSuffixOption | lower == \"prefix\" %}\n                {% set alias = prefixSuffixToBeAdded ~ column %}\n            {% else %}\n                {% set alias = column ~ prefixSuffixToBeAdded %}\n            {% endif %}\n        {% else %}\n            {% set alias = column %}\n        {% endif %}\n\n        {% set column_expr = expressionToBeApplied | replace('column_value', '\"' ~ column ~ '\"') | replace('column_name', \"'\" ~ column ~ \"'\") %}\n        \n        {% if changeOutputFieldType %}\n            {% set column_expr = column_expr ~ '::' ~ castOutputTypeName %}\n        {% endif %}\n        \n        {% do column_expressions.append(column_expr ~ ' as ' ~ \"\\\"\" ~  alias ~ \"\\\"\") %}\n    {% endfor %}\n\n    {% set original_columns = [] %}\n    {% if copyOriginalColumns %}\n        {% for column in columnNames %}\n            {% do original_columns.append('\"' ~ column ~ '\"') %}\n        {% endfor %}\n    {% endif %}\n    {% set all_columns = column_expressions + remainingColumns + original_columns %}\n\n    select \n        {{ all_columns | join(', ') }}\n    from {{ relation }}",
+    "parameters" : {
+      "type" : "record",
+      "fields" : [ {
+        "name" : "relation",
+        "kind" : {
+          "type" : "value"
+        },
+        "optional" : false,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "columnNames",
+        "kind" : {
+          "type" : "value"
+        },
+        "optional" : false,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "expressionToBeApplied",
+        "kind" : {
+          "type" : "value"
+        },
+        "optional" : false,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "prefixSuffixToBeAdded",
+        "kind" : {
+          "type" : "value",
+          "value" : "''"
+        },
+        "optional" : true,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "changeOutputFieldName",
+        "kind" : {
+          "type" : "value",
+          "value" : "false"
+        },
+        "optional" : true,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "isPrefix",
+        "kind" : {
+          "type" : "value",
+          "value" : "true"
+        },
+        "optional" : true,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "changeOutputFieldType",
+        "kind" : {
+          "type" : "value",
+          "value" : "false"
+        },
+        "optional" : true,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "castOutputTypeName",
+        "kind" : {
+          "type" : "value",
+          "value" : "''"
+        },
+        "optional" : true,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "copyOriginalColumns",
+        "kind" : {
+          "type" : "value",
+          "value" : "false"
+        },
+        "optional" : true,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "remainingColumns",
+        "kind" : {
+          "type" : "value",
+          "value" : "[]"
+        },
+        "optional" : true,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "prefixSuffixOption",
+        "kind" : {
+          "type" : "value",
+          "value" : "'prefix / suffix'"
+        },
+        "optional" : true,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      }, {
+        "name" : "dataType",
+        "kind" : {
+          "type" : "value",
+          "value" : "'String'"
+        },
+        "optional" : true,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      } ]
+    },
+    "staleState" : "none",
+    "propertiesFile" : {
+      "name" : "macros",
+      "content" : "---\nversion: 2\nmacros:\n- name: \"evaluate_expression\"\n  arguments:\n  - name: \"expression\"\n    type: \"value\"\n    description: \"{\\\"ProphecyType\\\": \\\"value\\\"}\"\n  macroType: \"expression\"\n- name: \"BulkColumnExpressions\"\n  arguments:\n  - name: \"parameter1\"\n    type: \"value\"\n    description: \"{\\\"ProphecyType\\\": \\\"value\\\"}\"\n  macroType: \"query\"\n",
+      "path" : "AlteryxSnowflake/macros/macros.yml",
+      "projectConfiguration" : null,
+      "folderConfiguration" : {
+        "version" : 2,
+        "macros" : [ {
+          "name" : "evaluate_expression",
+          "arguments" : [ {
+            "name" : "expression",
+            "type" : "value",
+            "description" : "{\"ProphecyType\": \"value\"}"
+          } ],
+          "macroType" : "expression"
+        }, {
+          "name" : "BulkColumnExpressions",
+          "arguments" : [ {
+            "name" : "parameter1",
+            "type" : "value",
+            "description" : "{\"ProphecyType\": \"value\"}"
+          } ],
+          "macroType" : "query"
+        } ]
+      },
+      "packagesYml" : null,
+      "editable" : true
+    },
+    "version" : 0
+  }
+}

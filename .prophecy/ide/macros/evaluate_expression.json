@@ -1,0 +1,37 @@
+{
+  "evaluate_expression" : {
+    "name" : "evaluate_expression",
+    "macroType" : "expression",
+    "definition" : "{% set sql_query = 'select ' ~ expression ~ ' as result' %}\n \n{% set result = run_query(sql_query) %}\n \n{% if result %}\n  {% for row in result %}\n    {{row['result']}}\n  {% endfor %}\n   \n{% else %}\n  {{ log(\"Query failed or returned no results\", info = True) }} {{ log(expression, info = True) }}\n{% endif %} \n",
+    "parameters" : {
+      "type" : "record",
+      "fields" : [ {
+        "name" : "expression",
+        "kind" : {
+          "type" : "value"
+        },
+        "optional" : false,
+        "isWorkflowNodeConfiguration" : false,
+        "isReferenced" : false
+      } ]
+    },
+    "staleState" : "none",
+    "propertiesFile" : {
+      "name" : "macros",
+      "content" : "---\nversion: 2\nmacros:\n- name: \"evaluate_expression\"\n  arguments: []\n  macroType: \"expression\"\n",
+      "path" : "AlteryxSnowflake/macros/macros.yml",
+      "projectConfiguration" : null,
+      "folderConfiguration" : {
+        "version" : 2,
+        "macros" : [ {
+          "name" : "evaluate_expression",
+          "arguments" : [ ],
+          "macroType" : "expression"
+        } ]
+      },
+      "packagesYml" : null,
+      "editable" : true
+    },
+    "version" : 0
+  }
+}
